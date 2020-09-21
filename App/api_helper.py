@@ -49,8 +49,8 @@ async def get_local_news(db=None, **kwargs) -> List[Dict]:
     Returns:
         List[Dict]: выборка из бд
     """
-    limit = int(kwargs['limit']) if kwargs.get('limit') else 5
-    offset = int(kwargs['offset']) if kwargs.get('offset') else 0
+    limit = int(kwargs.get('limit', 5))
+    offset = int(kwargs.get('offset', 0))
     order = kwargs.get('order') or 'id'
     sort = kwargs.get('sort') or 'asc'
     async with db.acquire() as conn:
