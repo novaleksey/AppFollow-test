@@ -11,12 +11,9 @@ from aiojobs.aiohttp import setup
 from api_helper import validate_params, get_local_news
 from data_updater import background_parser
 
-routes = web.RouteTableDef()
-# logging.basicConfig()
-# log = logging.getLogger()
-# log.setLevel(logging.INFO)
-
 __author__ = 'Novozhilov A.S.'
+
+routes = web.RouteTableDef()
 
 
 @routes.get('/posts')

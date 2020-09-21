@@ -3,6 +3,7 @@
 """
 import asyncio
 from asyncpg.exceptions import NotNullViolationError
+from asyncpg.pool import Pool
 from aiohttp import ClientSession
 
 __author__ = 'Novozhilov A.S.'
@@ -11,7 +12,7 @@ _GET_NEWS_IDS_URL = 'https://hacker-news.firebaseio.com/v0/topstories.json'
 _GET_NEWS_DATA_URL = 'https://hacker-news.firebaseio.com/v0/item/{}.json'
 
 
-async def background_parser(db, timeout: int, max_news_count: int) -> None:
+async def background_parser(db: Pool, timeout: int, max_news_count: int) -> None:
     """
     Корутина для обновления новостей в бд.
     Args:
@@ -28,7 +29,7 @@ async def background_parser(db, timeout: int, max_news_count: int) -> None:
         await asyncio.sleep(timeout)
 
 
-async def get_news(db, session: ClientSession, news_count_max: int) -> None:
+async def get_news(db: Pool, session: ClientSession, news_count_max: int) -> None:
     """
     Получение информации о новости с источника, вычисление разницы с локальными данными.
     Args:
@@ -68,7 +69,7 @@ async def get_news_ids(session: ClientSession) -> list:
         return await res.json()
 
 
-async def get_existed_ids(db) -> set:
+async def get_existed_ids(db: Pool) -> set:
     """
     Получение списка идентификаторов новостей, которые уже сохранили в бд
     Args:
@@ -87,7 +88,7 @@ async def get_existed_ids(db) -> set:
             return set(res)
 
 
-async def collect_news(db, news_content: dict) -> None:
+async def collect_news(db: Pool, news_content: dict) -> None:
     """
     Заполнение бд записями
     Args:
@@ -108,7 +109,7 @@ async def collect_news(db, news_content: dict) -> None:
         pass
 
 
-async def remove_old_news(db, news_ids: set) -> None:
+async def remove_old_news(db: Pool, news_ids: set) -> None:
     """
     Удаление локальных записей о новостях, которые уже не в топ N
     Args:

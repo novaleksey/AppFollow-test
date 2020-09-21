@@ -18,7 +18,7 @@ def validate_params(params) -> bool:
     """
     if 'limit' in params:
         try:
-            if int(params['limit']) < 0:
+            if int(params['limit']) <= 0:
                 return False
         except ValueError:
             return False
