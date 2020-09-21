@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+    app:
+        build: ./App
+        image: app:1
+        container_name: app
+        volumes:
+            - ./App:/App/
+        tty: true
+        depends_on:
+          - database
+        ports:
+            - 8080:8080
+        restart: on-failure:3
+    database:
+        image: postgres
+        container_name: postgres
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        volumes:
+          - ./App/Build/init.sql:/docker-entrypoint-initdb.d/init.sql
